@@ -57,10 +57,12 @@ namespace FBTool.BLL.Implement.Facebook
             try
             {
                 var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(60));
+
                 var reviewsURL = page + "/reviews";
 
                 _webDriver.Navigate().GoToUrl(reviewsURL);
 
+                //Check if this user can reviews this page
                 var buttonYes = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//span[text()=\"Yes\"]")));
                 buttonYes.Click();
 
@@ -70,7 +72,7 @@ namespace FBTool.BLL.Implement.Facebook
                 var buttonPost = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//span[text()=\"Post\"]")));
                 buttonPost.Click();
 
-                //Refrest page to get reviews
+                //Refresh page to get text reviews
                 _webDriver.Navigate().Refresh();
 
                 if (!string.IsNullOrEmpty(photo))

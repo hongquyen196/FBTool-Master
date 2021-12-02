@@ -17,6 +17,11 @@ namespace FBTool.App.Views
     public partial class MainForm : RadForm
     {
         private List<IFacebookBussiness> _facebookBussinesses = new List<IFacebookBussiness>();
+
+        private string[] _pages = new string[] { };
+
+        private string[] _contents = new string[] { };
+
         public MainForm()
         {
             InitializeComponent();
@@ -28,24 +33,24 @@ namespace FBTool.App.Views
             //List<Profile> profiles = ((IEnumerable)lvProfiles.DataSource).Cast<Profile>().ToList();
             //profiles.ForEach(p =>
             //{
-                var task = new Task(() =>
+            var task = new Task(() =>
+            {
+                var random = new Random();
+                IFacebookBussiness facebookBussiness = Program.GetService<IFacebookBussiness>();
+                facebookBussiness.ChromeProfile(cbProfiles.Text, "Profile 1", false);
+                string[] pages = tbPages.Lines;
+                string[] contents = _contents;//tbContents.Lines;
+                foreach (string page in pages)
                 {
-                    var random = new Random();
-                    IFacebookBussiness facebookBussiness = Program.GetService<IFacebookBussiness>();
-                    facebookBussiness.ChromeProfile(cbProfiles.Text, "Profile 1", false);
-                    string[] pages = tbPages.Lines;
-                    string[] contents = tbContents.Lines;
-                    foreach(string page in pages)
-                    {
-                        string content = contents[random.Next(contents.Length)];
-                        string[] split = content.Split('|');
-                        string text = split[0].TrimEnd('\r', '\n');
-                        string photo = split[1].TrimEnd('\r', '\n');
-                        facebookBussiness.ReviewsPage(page, text, photo);
-                    }
-                    _facebookBussinesses.Add(facebookBussiness);
-                });
-                task.Start();
+                    string content = contents[random.Next(contents.Length)];
+                    string[] split = content.Split('|');
+                    string text = split[0].TrimEnd('\r', '\n');
+                    string photo = split[1].TrimEnd('\r', '\n');
+                    facebookBussiness.ReviewsPage(page, text, photo);
+                }
+                _facebookBussinesses.Add(facebookBussiness);
+            });
+            task.Start();
             //});
         }
 
@@ -69,7 +74,8 @@ namespace FBTool.App.Views
             {
                 btnRun.Text = "Stop";
                 Start();
-            } else
+            }
+            else
             {
                 btnRun.Text = "Start";
                 Stop();
@@ -77,46 +83,82 @@ namespace FBTool.App.Views
 
         }
 
-        private void radButton1_Click(object sender, System.EventArgs e) {
-            SaveFileDialog f = new SaveFileDialog();
-            f.ShowDialog();
+        private void radButton1_Click(object sender, System.EventArgs e)
+        {
+            RadOpenFolderDialog openFolderDialog = new RadOpenFolderDialog();
+            DialogResult dialogResult = openFolderDialog.ShowDialog();
 
-            //RadOpenFolderDialog openFolderDialog = new RadOpenFolderDialog();
-            //DialogResult dialogResult = openFolderDialog.ShowDialog();
-           
-            //if (dialogResult.Equals(DialogResult.OK))
-            //{
-            //    MainForm_Load(sender, e);
-            //}
+            if (dialogResult.Equals(DialogResult.OK))
+            {
+                MainForm_Load(sender, e);
+            }
 
-            //openFolderDialog.RestoreDirectory = true;
+            openFolderDialog.RestoreDirectory = true;
         }
 
         private void radButton2_Click(object sender, System.EventArgs e)
         {
-            RadOpenFileDialog openFileDialog = new RadOpenFileDialog();
-            DialogResult dialogResult = openFileDialog.ShowDialog();
-            
-            if (dialogResult.Equals(DialogResult.OK))
+            //RadOpenFileDialog openFileDialog = new RadOpenFileDialog();
+            //DialogResult dialogResult = openFileDialog.ShowDialog();
+
+            //if (dialogResult.Equals(DialogResult.OK))
+            //{
+            //    Stream fileStream = openFileDialog.OpenFile();
+            //    StreamReader streamReader = new StreamReader(fileStream);
+            //    tbPages.AppendText(streamReader.ReadToEnd());
+            //}
+            //openFileDialog.RestoreDirectory = true;
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Open Text File";
+            openFileDialog.Filter = "TXT files|*.txt";
+            openFileDialog.InitialDirectory = @"C:\";
+            if (openFileDialog.ShowDialog().Equals(DialogResult.OK))
             {
-                Stream fileStream = openFileDialog.OpenFile();
-                StreamReader streamReader = new StreamReader(fileStream);
-                tbPages.Text = streamReader.ReadToEnd();
+                string pathToFile = openFileDialog.FileName;
+                if (File.Exists(pathToFile))
+                {
+                    string[] allLines = File.ReadAllLines(pathToFile);
+                    _pages = allLines;
+                    using (StreamReader sr = new StreamReader(pathToFile))
+                    {
+                        tbPages.Text = sr.ReadToEnd();
+                    }
+                }
             }
             openFileDialog.RestoreDirectory = true;
         }
 
         private void radButton3_Click(object sender, System.EventArgs e)
         {
-            RadOpenFileDialog openFileDialog = new RadOpenFileDialog();
-            DialogResult dialogResult = openFileDialog.ShowDialog();
+            //RadOpenFileDialog openFileDialog = new RadOpenFileDialog();
+            //DialogResult dialogResult = openFileDialog.ShowDialog();
 
-            if (dialogResult.Equals(DialogResult.OK))
+            //if (dialogResult.Equals(DialogResult.OK))
+            //{
+            //    Stream fileStream = openFileDialog.OpenFile();
+            //    StreamReader streamReader = new StreamReader(fileStream);
+            //    string contents = streamReader.ReadToEnd();
+            //    tbContents.AppendText(contents);
+            //}
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Open Text File";
+            openFileDialog.Filter = "TXT files|*.txt";
+            openFileDialog.InitialDirectory = @"C:\";
+            if (openFileDialog.ShowDialog().Equals(DialogResult.OK))
             {
-                Stream fileStream = openFileDialog.OpenFile();
-                StreamReader streamReader = new StreamReader(fileStream);
-                tbContents.Text = streamReader.ReadToEnd();
+                string pathToFile = openFileDialog.FileName;
+                if (File.Exists(pathToFile))
+                {
+                    string[] allLines = File.ReadAllLines(pathToFile);
+                    _contents = allLines;
+                    using (StreamReader sr = new StreamReader(pathToFile))
+                    {
+                        tbContents.Text = sr.ReadToEnd();
+                    }
+                }
             }
+            openFileDialog.RestoreDirectory = true;
         }
 
         private void MainForm_Load(object sender, System.EventArgs e)
@@ -126,7 +168,7 @@ namespace FBTool.App.Views
                  .Where(path => Regex.IsMatch(path.FullName, @"Profile\s\d*$"))
                  .Select(directory => new Profile(directory.Name, directory.FullName))
                  .ToArray();
-              
+
             lvProfiles.DataSource = subdirs;
         }
     }

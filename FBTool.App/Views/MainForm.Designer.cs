@@ -30,12 +30,12 @@ namespace FBTool.App.Views
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn1 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 0", "Name");
-            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn2 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 1", "Path");
-            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn3 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 2", "User");
-            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn4 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 3", "Status");
-            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn5 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 4", "Process");
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn6 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 0", "Name");
+            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn7 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 1", "Path");
+            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn8 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 2", "User");
+            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn9 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 3", "Status");
+            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn10 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 4", "Process");
             this.radButton1 = new Telerik.WinControls.UI.RadButton();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
             this.fluentTheme1 = new Telerik.WinControls.Themes.FluentTheme();
@@ -133,7 +133,7 @@ namespace FBTool.App.Views
             this.cbProfiles.EditorControl.MasterTemplate.AllowColumnChooser = false;
             this.cbProfiles.EditorControl.MasterTemplate.EnableGrouping = false;
             this.cbProfiles.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.cbProfiles.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
+            this.cbProfiles.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.cbProfiles.EditorControl.Name = "NestedRadGridView";
             this.cbProfiles.EditorControl.ReadOnly = true;
             this.cbProfiles.EditorControl.ShowGroupPanel = false;
@@ -153,22 +153,22 @@ namespace FBTool.App.Views
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvProfiles.AutoScroll = true;
             this.lvProfiles.AutoSizeColumnsMode = Telerik.WinControls.UI.ListViewAutoSizeColumnsMode.Fill;
-            listViewDetailColumn1.HeaderText = "Name";
-            listViewDetailColumn1.Width = 33.29471F;
-            listViewDetailColumn2.HeaderText = "Path";
-            listViewDetailColumn2.Width = 306.1013F;
-            listViewDetailColumn3.HeaderText = "User";
-            listViewDetailColumn3.Width = 104.0224F;
-            listViewDetailColumn4.HeaderText = "Status";
-            listViewDetailColumn4.Width = 53.50262F;
-            listViewDetailColumn5.HeaderText = "Process";
-            listViewDetailColumn5.Width = 202.0789F;
+            listViewDetailColumn6.HeaderText = "Name";
+            listViewDetailColumn6.Width = 34.10418F;
+            listViewDetailColumn7.HeaderText = "Path";
+            listViewDetailColumn7.Width = 305.3497F;
+            listViewDetailColumn8.HeaderText = "User";
+            listViewDetailColumn8.Width = 104.4271F;
+            listViewDetailColumn9.HeaderText = "Status";
+            listViewDetailColumn9.Width = 54.19646F;
+            listViewDetailColumn10.HeaderText = "Process";
+            listViewDetailColumn10.Width = 200.9225F;
             this.lvProfiles.Columns.AddRange(new Telerik.WinControls.UI.ListViewDetailColumn[] {
-            listViewDetailColumn1,
-            listViewDetailColumn2,
-            listViewDetailColumn3,
-            listViewDetailColumn4,
-            listViewDetailColumn5});
+            listViewDetailColumn6,
+            listViewDetailColumn7,
+            listViewDetailColumn8,
+            listViewDetailColumn9,
+            listViewDetailColumn10});
             this.lvProfiles.GroupItemSize = new System.Drawing.Size(200, 28);
             this.lvProfiles.ItemSize = new System.Drawing.Size(200, 28);
             this.lvProfiles.ItemSpacing = -1;
@@ -287,6 +287,7 @@ namespace FBTool.App.Views
             // 
             // tbContents
             // 
+            this.tbContents.AcceptsReturn = true;
             this.tbContents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbContents.AutoScroll = true;
@@ -301,6 +302,7 @@ namespace FBTool.App.Views
             // 
             // tbPages
             // 
+            this.tbPages.AcceptsReturn = true;
             this.tbPages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbPages.Location = new System.Drawing.Point(78, 52);
