@@ -12,23 +12,28 @@ from selenium_utils import common
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-_CHROME_DRIVER = "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/lib/chromedriver"
-_PROFILE_PATH = "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/profile"
-_PROFILE_NAME = "Profile 1"
-_USERNAME = "be.chuotchui"
+_CHROME_DRIVER = '/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/lib/chromedriver'
+_PROFILE_PATH = '/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/profile'
+_PROFILE_NAME = 'Profile 1'
+_PROXY = "11.456.448.110:8080"
+_USERNAME = 'be.chuotchui'
 
-_PAGE = "https://www.facebook.com/100229885847034"
+_PAGE = "https://www.facebook.com/aothunvnchatdep"
 _CONTENTS = [
-    "Shop có nhiều hàng chất lượng tốt cực kỳ.\\nĐã mua lần đầu và rất ưng ý.\\nSẽ ủng hộ shop vào lần tới\🥰"
+    "Chất lượng tốt. giá cả rất hợp lí.\\nLần tới sẽ ủng hộ ạ. \😁",
+    "Nhận dc hàng rất ưng ý ạ, chất vải đẹp, mềm mịn giá cả hợp lý sẽ ủng hộ nữa \😌",
+    "Mới nhận dc hàng rất ưng ý ạ, chất vải đẹp, mềm mịn giá cả hợp lý sẽ ủng hộ. \😂"
 ]
 _ATTACHMENTS = [
     "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo1.jpeg",
-    "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo2.png",
-    "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo3.png",
-    "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo4.png"
+    # "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo2.png",
+    # "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo3.png",
+    # "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo4.png"
 ]
 
-INJECT_SCRIPTS = '/Users/qhle/Documents/Freelancer/FBTool-master/FBScript/inject.js'
+INJECT_CREATEYOURPOSTREVIEW = '/Users/qhle/Documents/Freelancer/FBTool-master/FBScript/createYourPostReview.js'
+INJECT_GETYOURPOSTREVIEW = '/Users/qhle/Documents/Freelancer/FBTool-master/FBScript/getYourPostReview.js'
+
 
 BUTTON_CREATE_POST = (
     By.XPATH, '//div[@id="MComposer"]//div[@role="button"][1]')
@@ -44,11 +49,12 @@ BUTTON_POST_LOCATOR = (
     By.XPATH, '//div[contains(@aria-label, "Post") or contains(@aria-label, "Đăng") and @role="button"]')
 YOUR_POSTS = (
     By.XPATH, '//a[contains(@href,"https://www.facebook.com/{0}/posts/")]'.format(_USERNAME))
-options = Options()
-options.add_argument("--start-maximized")
-options.add_argument("--user-data-dir=" + _PROFILE_PATH)
-options.add_argument("--profile-directory=" + _PROFILE_NAME)
 
+options = Options()
+options.add_argument('--start-maximized')
+options.add_argument('--user-data-dir=%s' % _PROFILE_PATH)
+options.add_argument('--profile-directory=%s' % _PROFILE_NAME)
+# options.add_argument('--proxy-server=%s' % _PROXY)
 
 class Facebook:
     """
@@ -88,41 +94,48 @@ class Facebook:
         """
         logger.info('reviews_page: %s', page)
         try:
-            if (attachments):
-                photo_ids = self.upload_private_attachment(attachments)
+            # Upload attachment to get photo_ids
+            photo_ids = self.upload_private_attachment(attachments) if attachments else []
+            # photo_ids = ['1780305108835541', '1780305102168875', '1780305215502197', '1780305252168860']
 
             reviews_url = page + '/reviews/?ref=page_internal'
+            print('reviews_url', reviews_url)
 
             # Redirect to Reviews
             self.driver.get(reviews_url)
 
-            # # Click button "Yes" from Recommend
-            # common.click(self.driver, BUTTON_YES_LOCATOR)
+            # Click button "Yes" from Recommend
+            common.click(self.driver, BUTTON_YES_LOCATOR)
 
-            # # Enter text into editor
-            # common.send(self.driver, EDITOR_RECOMMEND_LOCATOR,
-            #             '___REPLACEMENT_REVIEW_CONTENT___')
+            # Enter text into editor
+            common.send(self.driver, EDITOR_RECOMMEND_LOCATOR,
+                        '___REPLACEMENT_REVIEW_CONTENT___')
 
-            # with open(INJECT_SCRIPTS, errors='ignore') as f:
-            #     script = f.read()
-            #     script = script.replace(
-            #         '___CONTENT___', '\'{}\''.format(content))
-            #     script = script.replace(
-            #         '___PHOTO_IDS___', str(photo_ids))
-            #     self.driver.execute_script(script)
+            with open(INJECT_CREATEYOURPOSTREVIEW, errors='ignore') as f:
+                script = f.read()
+                script = script.replace(
+                    '___CONTENT___', '"%s"' % content)
+                script = script.replace(
+                    '___PHOTO_IDS___', str(photo_ids))
+                self.driver.execute_script(script)
 
-            # # Click button "Post"
-            # common.click(self.driver, BUTTON_POST_LOCATOR)
+            # Click button "Post"
+            common.click(self.driver, BUTTON_POST_LOCATOR, sleep=5)
 
             # Refresh page to get reviews
-            self.driver.refresh()
+            self.driver.get(reviews_url)
 
-            posts_id = self.driver.execute_script('return /(?<=post_fbid\\":)(\d+)/g.exec(document.body.innerHTML)[0]')
+            post_id = 0
+            with open(INJECT_GETYOURPOSTREVIEW, errors='ignore') as f:
+                script = f.read()
+                script = script.replace(
+                    '___USERNAME___', re.escape(_USERNAME))
+                post_id = self.driver.execute_script(script)
 
-            print('posts', posts_id)
+            print('post_id', post_id)
             logger.info('review_page done.')
 
-            return posts_id
+            return post_id
 
         except Exception as e:
             logger.error('Cannot reviews page due: %s', str(e))
@@ -154,7 +167,9 @@ if __name__ == '__main__':
 
         facebook.review_page(
             page=_PAGE,
-            content=_CONTENTS[0])
+            content=_CONTENTS[0],
+            attachments=_ATTACHMENTS
+            )
     except Exception as e:
         print(e)
         pass

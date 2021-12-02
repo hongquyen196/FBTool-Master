@@ -48,7 +48,7 @@ def send(driver, locator, value, wait_seconds=_WAIT, sleep=0):
         raise ElementNotFound(e)
 
 
-def get_all(driver, locator, number=1, wait_seconds=_WAIT):
+def find(driver, locator, number=1, wait_seconds=_WAIT):
     """
     Args:
       driver  - Instance of WebDriver (Ie, Firefox, Chrome or Remote)
