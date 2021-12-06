@@ -1,5 +1,6 @@
 import sys
 import json
+import os
 
 print('Argument List:', str(sys.argv))
 parameters = {}
@@ -7,7 +8,7 @@ if len(sys.argv) > 1:
     with open(sys.argv[1], errors='ignore') as f:
         parameters = json.load(f)
 else:
-    with open('parameters.json', errors='ignore') as f:
+    with open(os.path.join(sys.path[0], 'parameters.json'), errors='ignore') as f:
         parameters = json.load(f)       
 
 _CHROME_DRIVER = parameters['_CHROME_DRIVER']

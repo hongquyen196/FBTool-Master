@@ -2,12 +2,12 @@ import json
 import logging
 import re
 import sys
+import os
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.common.action_chains import ActionChains
 
 from selenium_utils import common
 
@@ -20,7 +20,7 @@ if len(sys.argv) > 1:
     with open(sys.argv[1], errors='ignore') as f:
         parameters = json.load(f)
 else:
-    with open('parameters.json', errors='ignore') as f:
+    with open(os.path.join(sys.path[0], 'parameters.json'), errors='ignore') as f:
         parameters = json.load(f)
 
 _CHROME_DRIVER = parameters['_CHROME_DRIVER']
@@ -190,13 +190,12 @@ if __name__ == '__main__':
             driver.minimize_window()
 
         facebook = Facebook(driver)
-        facebook.upload_private_attachment(_ATTACHMENTS)
-        # facebook.review_page(
-        #     page=_PAGE,
-        #     content=_CONTENTS[0],
-        #     attachments=_ATTACHMENTS
-        # )
-        driver.close()
+        facebook.review_page(
+            page=_PAGE,
+            content=_CONTENTS[0],
+            attachments=_ATTACHMENTS
+        )
+        facebook.quit()
     except Exception as e:
         print(e)
         pass
