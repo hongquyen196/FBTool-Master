@@ -1,5 +1,7 @@
+import json
 import logging
 import re
+import sys
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -12,27 +14,38 @@ from selenium_utils import common
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-_CHROME_DRIVER = '/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/lib/chromedriver'
-_PROFILE_PATH = '/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/profile'
-_PROFILE_NAME = 'Profile 1'
-_PROXY = "11.456.448.110:8080"
-_USERNAME = 'be.chuotchui'
+print('Argument List:', str(sys.argv))
+parameters = {}
+if len(sys.argv) > 1:
+    with open(sys.argv[1], errors='ignore') as f:
+        parameters = json.load(f)
+else:
+    with open('parameters.json', errors='ignore') as f:
+        parameters = json.load(f)
 
-_PAGE = "https://www.facebook.com/aothunvnchatdep"
-_CONTENTS = [
-    "Chất lượng tốt. giá cả rất hợp lí.\\nLần tới sẽ ủng hộ ạ. \😁",
-    "Nhận dc hàng rất ưng ý ạ, chất vải đẹp, mềm mịn giá cả hợp lý sẽ ủng hộ nữa \😌",
-    "Mới nhận dc hàng rất ưng ý ạ, chất vải đẹp, mềm mịn giá cả hợp lý sẽ ủng hộ. \😂"
-]
-_ATTACHMENTS = [
-    "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo1.jpeg",
-    # "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo2.png",
-    # "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo3.png",
-    # "/Users/qhle/Documents/Freelancer/FBTool-master/FBExecution/Python/test/photo4.png"
-]
+_CHROME_DRIVER = parameters['_CHROME_DRIVER']
+_PROFILE_PATH = parameters['_PROFILE_PATH']
+_PROFILE_NAME = parameters['_PROFILE_NAME']
+_HEADLESS = parameters['_HEADLESS']
+_PROXY = parameters['_PROXY']
+_USERNAME = parameters['_USERNAME']
+_PAGE = parameters['_PAGE']
+_CONTENTS = parameters['_CONTENTS']
+_ATTACHMENTS = parameters['_ATTACHMENTS']
+_INJECTED_CREATE_YOUR_POST_REVIEW = parameters['_INJECTED_CREATE_YOUR_POST_REVIEW']
+_INJECTED_GET_YOUR_POST_REVIEW = parameters['_INJECTED_GET_YOUR_POST_REVIEW']
 
-INJECT_CREATEYOURPOSTREVIEW = '/Users/qhle/Documents/Freelancer/FBTool-master/FBScript/createYourPostReview.js'
-INJECT_GETYOURPOSTREVIEW = '/Users/qhle/Documents/Freelancer/FBTool-master/FBScript/getYourPostReview.js'
+print(_CHROME_DRIVER)
+print(_PROFILE_PATH)
+print(_PROFILE_NAME)
+print(_HEADLESS)
+print(_PROXY)
+print(_USERNAME)
+print(_PAGE)
+print(_CONTENTS)
+print(_ATTACHMENTS)
+print(_INJECTED_CREATE_YOUR_POST_REVIEW)
+print(_INJECTED_GET_YOUR_POST_REVIEW)
 
 
 BUTTON_CREATE_POST = (
@@ -51,10 +64,15 @@ YOUR_POSTS = (
     By.XPATH, '//a[contains(@href,"https://www.facebook.com/{0}/posts/")]'.format(_USERNAME))
 
 options = Options()
-options.add_argument('--start-maximized')
 options.add_argument('--user-data-dir=%s' % _PROFILE_PATH)
 options.add_argument('--profile-directory=%s' % _PROFILE_NAME)
-# options.add_argument('--proxy-server=%s' % _PROXY)
+# if _HEADLESS:
+#     options.add_argument('--headless')
+#     options.add_argument('--disable-gpu')
+#     options.add_argument('--remote-debugging-port=45447')
+if _PROXY:
+    options.add_argument('--proxy-server=%s' % _PROXY)
+
 
 class Facebook:
     """
@@ -69,6 +87,8 @@ class Facebook:
         Upload private attachment
         """
         self.driver.get("https://m.facebook.com")
+
+        print('title', self.driver.title)
 
         common.click(self.driver, BUTTON_CREATE_POST)
 
@@ -95,10 +115,13 @@ class Facebook:
         logger.info('reviews_page: %s', page)
         try:
             # Upload attachment to get photo_ids
-            photo_ids = self.upload_private_attachment(attachments) if attachments else []
+            photo_ids = self.upload_private_attachment(
+                attachments) if attachments else []
             # photo_ids = ['1780305108835541', '1780305102168875', '1780305215502197', '1780305252168860']
 
             reviews_url = page + '/reviews/?ref=page_internal'
+
+            print('title', self.driver.title)
             print('reviews_url', reviews_url)
 
             # Redirect to Reviews
@@ -111,7 +134,7 @@ class Facebook:
             common.send(self.driver, EDITOR_RECOMMEND_LOCATOR,
                         '___REPLACEMENT_REVIEW_CONTENT___')
 
-            with open(INJECT_CREATEYOURPOSTREVIEW, errors='ignore') as f:
+            with open(_INJECTED_CREATE_YOUR_POST_REVIEW, errors='ignore') as f:
                 script = f.read()
                 script = script.replace(
                     '___CONTENT___', '"%s"' % content)
@@ -126,7 +149,7 @@ class Facebook:
             self.driver.get(reviews_url)
 
             post_id = 0
-            with open(INJECT_GETYOURPOSTREVIEW, errors='ignore') as f:
+            with open(_INJECTED_GET_YOUR_POST_REVIEW, errors='ignore') as f:
                 script = f.read()
                 script = script.replace(
                     '___USERNAME___', re.escape(_USERNAME))
@@ -163,13 +186,17 @@ if __name__ == '__main__':
             executable_path=_CHROME_DRIVER,
             options=options)
 
-        facebook = Facebook(driver)
+        if _HEADLESS:
+            driver.minimize_window()
 
-        facebook.review_page(
-            page=_PAGE,
-            content=_CONTENTS[0],
-            attachments=_ATTACHMENTS
-            )
+        facebook = Facebook(driver)
+        facebook.upload_private_attachment(_ATTACHMENTS)
+        # facebook.review_page(
+        #     page=_PAGE,
+        #     content=_CONTENTS[0],
+        #     attachments=_ATTACHMENTS
+        # )
+        driver.close()
     except Exception as e:
         print(e)
         pass
