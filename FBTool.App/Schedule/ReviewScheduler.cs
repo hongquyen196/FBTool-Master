@@ -1,11 +1,6 @@
 ﻿using Quartz;
 using Quartz.Impl;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FBTool.App.Views
 {
@@ -13,7 +8,7 @@ namespace FBTool.App.Views
     {
         public IScheduler scheduler { get; set; }
 
-        public async void Start(String parameterFile, DateTimeOffset startTime)
+        public async void Start(string parameterFile, DateTimeOffset startTime)
         {
             scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 

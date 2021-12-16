@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBTool.App", "FBTool.App\FBTool.App.csproj", "{B14BB620-D0C4-43FD-BC1C-F2D60429FECC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBReview.App", "FBTool.App\FBReview.App.csproj", "{B14BB620-D0C4-43FD-BC1C-F2D60429FECC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

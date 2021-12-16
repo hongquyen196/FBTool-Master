@@ -129,8 +129,8 @@ namespace FBTool.App.Views
                 {
                     Parameter parameter = new Parameter();
                     parameter._CHROME_DRIVER = Constant.CHROME_DRIVER;
-                    parameter._INJECTED_CREATE_YOUR_POST_REVIEW = Constant.INJECTED_CREATE_YOUR_POST_REVIEW;
-                    parameter._INJECTED_GET_YOUR_POST_REVIEW = Constant.INJECTED_GET_YOUR_POST_REVIEW;
+                    parameter._INJECTED_CREATE_YOUR_POST_REVIEW = Constant.INJECTED_CREATE_YOUR_POST_REVIEW_JS;
+                    parameter._INJECTED_GET_YOUR_POST_REVIEW = Constant.INJECTED_GET_YOUR_POST_REVIEW_JS;
                     parameter._HEADLESS = false;
 
                     int randomProfilesIndex = random.Next(0, _profiles.Count);
@@ -179,18 +179,15 @@ namespace FBTool.App.Views
 
                     var guid = Guid.NewGuid().ToString();
 
-                    var path = string.Format("{0}.json", guid);
+                    var path = $"{Constant.REVIEW_PARAMETER_PATH}\\{guid}.json";
 
-                    File.WriteAllText(string.Format("{0}.json", guid), jsonData);
+                    File.WriteAllText(path, jsonData);
 
                     _parameters.Add(path);
 
                     reviewScheduler.Start(path, startTime);
 
                     schedulers.Add(reviewScheduler.scheduler);
-
-
-
                 }
                 catch (Exception ex)
                 {
@@ -218,7 +215,7 @@ namespace FBTool.App.Views
 
         private void FBReviewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _parameters.ForEach(p => File.Delete(Constant.REVIEW_PARAMETER_PATH + p));
+            _parameters.ForEach(p => File.Delete(p));
         }
     }
 }

@@ -11,13 +11,10 @@ namespace FBTool.App.Views
 {
     public class ReviewJob : IJob
     {
-
-
         public async Task Execute(IJobExecutionContext context)
         {
             var schedulerContext = context.Scheduler.Context;
-            var parameterFile = (String)schedulerContext.Get("parameterFile");
-            var parameter = Constant.REVIEW_PARAMETER_PATH + parameterFile;
+            var parameter = schedulerContext.Get("parameterFile").ToString();
 
             MessageBox.Show(parameter);
 
@@ -31,7 +28,7 @@ namespace FBTool.App.Views
 
         private void Run(string args)
         {
-            using (Process process = Process.Start(Constant.REVIEW_EXE, args))
+            using (Process process = Process.Start(Constant.REVIEW_EXECUTABLE, args))
             {
                 using (StreamReader reader = process.StandardOutput)
                 {
