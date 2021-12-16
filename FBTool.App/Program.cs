@@ -1,7 +1,6 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
-using FBTool.App.Extensions;
 using FBTool.App.Views;
 using System;
 using System.Windows.Forms;
@@ -20,11 +19,10 @@ namespace FBTool.App
         static void Main()
         {
             container.Install(FromAssembly.This());
-            container.Register(Component.For<MainForm>());
-            container.RegisterService();
+            container.Register(Component.For<FBReviewForm>());
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(container.Resolve<MainForm>());
+            Application.Run(container.Resolve<FBReviewForm>());
         }
 
         public static T GetService<T>()

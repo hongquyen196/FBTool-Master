@@ -1,27 +1,26 @@
 import json
-import logging
 import re
 import sys
 import os
 
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 
 from selenium_utils import common
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 print('Argument List:', str(sys.argv))
 parameters = {}
 if len(sys.argv) > 1:
-    with open(sys.argv[1], errors='ignore') as f:
+    with open(sys.argv[1], errors='ignore', encoding="utf-8") as f:
         parameters = json.load(f)
 else:
-    with open(os.path.join(sys.path[0], 'parameters.json'), errors='ignore') as f:
-        parameters = json.load(f)
+    print('Need to add parameters file.')
+    exit()
+    # with open(os.path.join(sys.path[0], 'parameters.json'), errors='ignore') as f:
+    #     parameters = json.load(f)
 
 _CHROME_DRIVER = parameters['_CHROME_DRIVER']
 _PROFILE_PATH = parameters['_PROFILE_PATH']
@@ -62,7 +61,8 @@ BUTTON_POST_LOCATOR = (
     By.XPATH, '//div[contains(@aria-label, "Post") or contains(@aria-label, "Đăng") and @role="button"]')
 YOUR_POSTS = (
     By.XPATH, '//a[contains(@href,"https://www.facebook.com/{0}/posts/")]'.format(_USERNAME))
-
+    
+service = Service(_CHROME_DRIVER)
 options = Options()
 options.add_argument('--user-data-dir=%s' % _PROFILE_PATH)
 options.add_argument('--profile-directory=%s' % _PROFILE_NAME)
@@ -104,7 +104,7 @@ class Facebook:
             photo_ids.append(fbid)
 
         print('photo_ids', photo_ids)
-        logger.info('upload_private_attachment done.')
+        print('upload_private_attachment done.')
 
         return photo_ids
 
@@ -112,7 +112,7 @@ class Facebook:
         """
         Reviews fanpage
         """
-        logger.info('reviews_page: %s', page)
+        print('reviews_page: %s' % page)
         try:
             # Upload attachment to get photo_ids
             photo_ids = self.upload_private_attachment(
@@ -156,19 +156,19 @@ class Facebook:
                 post_id = self.driver.execute_script(script)
 
             print('post_id', post_id)
-            logger.info('review_page done.')
+            print('review_page done.')
 
             return post_id
 
         except Exception as e:
-            logger.error('Cannot reviews page due: %s', str(e))
+            print('Cannot reviews page due: %s', str(e))
             pass
 
     def comments_post(self, post, text, photo=''):
         """
         Comments post
         """
-        logger.info('comments_post')
+        print('comments_post')
 
     def quit(self):
         """
@@ -183,7 +183,7 @@ class Facebook:
 if __name__ == '__main__':
     try:
         driver = webdriver.Chrome(
-            executable_path=_CHROME_DRIVER,
+            service=service,
             options=options)
 
         if _HEADLESS:
