@@ -363,5 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Profile
-FBExecution/Python/profile/
+FBExecution/Python/_REVIEW_EXECUTABLE/
+FBExecution/Python/_CHROME_PROFILE/osx
+FBExecution/Python/_CHROME_PROFILE/windows
 FBExecution/Python/build/
