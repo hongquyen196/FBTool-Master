@@ -1,36 +1,15 @@
 import json
-import re
 import sys
 import os
-import emoji
 import platform
 
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 
 from selenium_utils import common
-
-# START COMMONS ===================================================================================================================
-
-# search your emoji
-def is_emoji(s):
-    return s in emoji.UNICODE_EMOJI_ENGLISH
-
-
-# add backslashes before emoji
-# add backslashes before newline characters
-def add_backslashes(text):
-    return (
-        "".join("\\" + char if is_emoji(char) else char for char in text)
-        .strip()
-        .replace("\n", "\\n")
-    )
-
-
-# END COMMONS =====================================================================================================================
+from selenium_utils import proxy
 
 # START LOAD PARAMETERS ============================================================================================================
 
@@ -126,16 +105,9 @@ BUTTON_POST_LOCATOR = (
 # END SELENIUM LOCATOR ============================================================================================================
 
 # Setup driver
-service = Service(_CHROME_DRIVER)
 options = Options()
 options.add_argument("--user-data-dir=%s" % _PROFILE_PATH)
 options.add_argument("--profile-directory=%s" % _PROFILE_NAME)
-# if _HEADLESS:
-#     options.add_argument('--headless')
-#     options.add_argument('--disable-gpu')
-#     options.add_argument('--remote-debugging-port=45447')
-if _PROXY:
-    options.add_argument("--proxy-server=%s" % _PROXY)
 
 
 class Facebook:
@@ -150,27 +122,30 @@ class Facebook:
         """
         Upload private attachment
         """
-        self.driver.get("https://m.facebook.com")
-
-        print("title", self.driver.title)
-
-        common.click(self.driver, BUTTON_CREATE_POST_LOCATOR)
-
-        for path in attachments:
-            common.send(self.driver, INPUT_PHOTO_LOCATOR, path, sleep=1)
-
-        all_photo_elements = common.find(
-            self.driver, INPUT_PHOTO_IDS_LOCATOR, number=len(attachments)
-        )
-
         photo_ids = []
-        for el in all_photo_elements:
-            fbid = el.get_attribute("value")
-            photo_ids.append(fbid)
+        try:
+            self.driver.get("https://m.facebook.com/home.php")
 
-        print("photo_ids", photo_ids)
-        print("upload_private_attachment done.")
+            print("title", self.driver.title)
 
+            common.click(self.driver, BUTTON_CREATE_POST_LOCATOR)
+
+            for path in attachments:
+                common.send(self.driver, INPUT_PHOTO_LOCATOR, path, sleep=1)
+
+            all_photo_elements = common.find(
+                self.driver, INPUT_PHOTO_IDS_LOCATOR, number=len(attachments)
+            )
+
+            for el in all_photo_elements:
+                fbid = el.get_attribute("value")
+                photo_ids.append(fbid)
+
+            print("photo_ids", photo_ids)
+            print("upload_private_attachment done.")
+        except Exception as e:
+            print("Cannot upload attachment due: %s", str(e))
+            pass
         return photo_ids
 
     def review_page(self, page, content, attachments=[]):
@@ -213,12 +188,11 @@ class Facebook:
             common.click(self.driver, BUTTON_POST_LOCATOR, sleep=5)
 
             # Refresh page to get reviews
-            self.driver.get(reviews_url)
+            self.driver.get(reviews_url.replace("www.facebook.com", "m.facebook.com"))
 
             post_id = 0
             with open(_INJECTED_GET_YOUR_POST_REVIEW, errors="ignore") as f:
                 script = f.read()
-                script = script.replace("___USERNAME___", re.escape(_USERNAME))
                 post_id = self.driver.execute_script(script)
 
             print("post_id", post_id)
@@ -248,6 +222,14 @@ class Facebook:
 
 if __name__ == "__main__":
     try:
+        if _PROXY:
+            options = proxy.add_proxy(options=options, proxy=_PROXY)
+        else:
+            options.add_argument("--disable-extensions")
+            options.add_argument("--hide-scrollbars")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--no-proxy-server")
+
         driver = webdriver.Chrome(executable_path=_CHROME_DRIVER, options=options)
 
         if _HEADLESS:
@@ -255,7 +237,7 @@ if __name__ == "__main__":
 
         facebook = Facebook(driver)
 
-        content = add_backslashes(_CONTENTS[0])
+        content = common.add_backslashes(_CONTENTS[0])
         page = _PAGE
         attachments = _ATTACHMENTS
 
