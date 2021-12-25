@@ -73,6 +73,12 @@ if not _CHROME_DRIVER:
         "_CHROME_DRIVER",
         "chromedriver.exe" if platform.system() == "Windows" else "chromedriver",
     )
+if not _PROFILE_PATH:
+    _PROFILE_PATH = os.path.join(
+        __location__,
+        "_CHROME_PROFILE",
+        "WINDOWS" if platform.system() == "Windows" else "OSX",
+    )
 if not _INJECTED_CREATE_YOUR_POST_REVIEW:
     _INJECTED_CREATE_YOUR_POST_REVIEW = os.path.join(
         __location__, "_REVIEW_JAVASCRIPT", "createYourPostReview.js"

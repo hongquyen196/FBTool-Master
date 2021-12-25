@@ -364,6 +364,5 @@ FodyWeavers.xsd
 
 # Profile
 FBExecution/Python/_REVIEW_EXECUTABLE/
-FBExecution/Python/_CHROME_PROFILE/osx
-FBExecution/Python/_CHROME_PROFILE/windows
+FBExecution/Python/_CHROME_PROFILE/
 FBExecution/Python/build/
