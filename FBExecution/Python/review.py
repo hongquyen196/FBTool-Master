@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 
 from selenium_utils import common
+from selenium_utils import element
 from selenium_utils import proxy
 
 # START LOAD PARAMETERS ============================================================================================================
@@ -116,6 +117,9 @@ class Facebook:
     """
 
     def __init__(self, driver: WebDriver):
+        driver.get("https://m.facebook.com/home.php")
+        print("title", driver.title)
+        element.wait_until_condition(driver, lambda d: "https://m.facebook.com/home.php" in d.current_url, 10 * 60)
         self.driver = driver
 
     def upload_private_attachment(self, attachments):
@@ -125,8 +129,6 @@ class Facebook:
         photo_ids = []
         try:
             self.driver.get("https://m.facebook.com/home.php")
-
-            print("title", self.driver.title)
 
             common.click(self.driver, BUTTON_CREATE_POST_LOCATOR)
 
@@ -162,7 +164,6 @@ class Facebook:
 
             reviews_url = page + "/reviews/?ref=page_internal"
 
-            print("title", self.driver.title)
             print("reviews_url", reviews_url)
 
             # Redirect to Reviews
@@ -246,4 +247,5 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(e)
+        driver.quit()
         pass
