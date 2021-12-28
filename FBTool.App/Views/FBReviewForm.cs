@@ -20,7 +20,9 @@ namespace FBTool.App.Views
 
         private ReviewScheduler reviewScheduler = new ReviewScheduler();
 
-        private List<Profile> _profiles = new List<Profile>();
+        private List<string> _profiles = new List<string>();
+
+        private List<User> _users = new List<User>();
 
         private List<string> _pages = new List<string>();
 
@@ -64,12 +66,28 @@ namespace FBTool.App.Views
             if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
                 string folderPath = Path.GetDirectoryName(folderBrowser.FileName);
-                cbProfilesPath.Text = folderPath;
+                cbProfilePath.Text = folderPath;
                 _profiles = Directory.GetDirectories(folderPath)
-                 .Select(path => new DirectoryInfo(path))
-                 .Where(path => Regex.IsMatch(path.FullName, @"Profile\s\d*$"))
-                 .Select(directory => new Profile(directory.Name, directory.FullName))
+                 .Select(path => new DirectoryInfo(path).Name)
+                 //.Where(path => Regex.IsMatch(path.FullName, @"Profile\s\d*$"))
+                 //.Select(directory => new Profile(directory.Name, directory.FullName))
                  .ToList();
+            }
+        }
+        private void btnOpenUsersFile_Click(object sender, EventArgs e)
+        {
+            string pathToFile = openFile();
+            if (File.Exists(pathToFile))
+            {
+                string[] lines = File.ReadAllLines(pathToFile);
+                _users = lines.ToList()
+                    .Select(userline => {
+                        string[] split = userline.Split('|');
+                        return new User(split[0], split[0], split[3], null);
+                    })
+                    .ToList();
+
+                cbUsersPath.Text = pathToFile;
             }
         }
 
@@ -99,11 +117,18 @@ namespace FBTool.App.Views
 
         private void cbProfilesPath_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _profiles = Directory.GetDirectories(cbProfilesPath.Text)
-                 .Select(path => new DirectoryInfo(path))
-                 .Where(path => Regex.IsMatch(path.FullName, @"Profile\s\d*$"))
-                 .Select(directory => new Profile(directory.Name, directory.FullName))
-                 .ToList();
+            if (Directory.Exists(cbProfilePath.Text))
+            {
+                _profiles = Directory.GetDirectories(cbProfilePath.Text)
+                     .Select(path => new DirectoryInfo(path).Name)
+                     //.Where(path => Regex.IsMatch(path.FullName, @"Profile\s\d*$"))
+                     //.Select(directory => new Profile(directory.Name, directory.FullName))
+                     .ToList();
+            } else
+            {
+                MessageBox.Show("Không tìm thấy thư mục profile!", "Lỗi", MessageBoxButtons.OK);
+            }
+    
         }
 
         private void cbFanpagesPath_SelectedIndexChanged(object sender, EventArgs e)
@@ -131,14 +156,15 @@ namespace FBTool.App.Views
                     parameter._CHROME_DRIVER = Constant.CHROME_DRIVER;
                     parameter._INJECTED_CREATE_YOUR_POST_REVIEW = Constant.INJECTED_CREATE_YOUR_POST_REVIEW_JS;
                     parameter._INJECTED_GET_YOUR_POST_REVIEW = Constant.INJECTED_GET_YOUR_POST_REVIEW_JS;
+                    parameter._PROFILE_PATH = cbProfilePath.Text;
                     parameter._HEADLESS = false;
 
-                    int randomProfilesIndex = random.Next(0, _profiles.Count);
-                    Profile profile = _profiles[randomProfilesIndex];
-                    parameter._PROFILE_PATH = profile.Path;
-                    parameter._PROFILE_NAME = profile.Name;
-                    parameter._USERNAME = profile.User;
-                    parameter._PROXY = profile.Proxy;
+                    int randomUsersIndex = random.Next(0, _users.Count);
+                    User user = _users[randomUsersIndex];
+
+                    parameter._PROFILE_NAME = user.Profile;
+                    parameter._USERNAME = user.Id;
+                    parameter._PROXY = user.Proxy;
 
                     if (indexOfPages >= _pages.Count)
                     {
@@ -217,5 +243,6 @@ namespace FBTool.App.Views
         {
             _parameters.ForEach(p => File.Delete(p));
         }
+
     }
 }

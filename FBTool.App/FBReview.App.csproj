@@ -80,7 +80,7 @@
       <DependentUpon>FBReviewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Parameter.cs" />
-    <Compile Include="Models\Profile.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Schedule\ReviewJob.cs" />
     <Compile Include="Schedule\ReviewScheduler.cs" />
     <EmbeddedResource Include="Properties\licenses.licx" />

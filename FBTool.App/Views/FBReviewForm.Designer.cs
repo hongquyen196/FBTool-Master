@@ -30,6 +30,9 @@ namespace FBTool.App.Views
         private void InitializeComponent()
         {
             this.gbSettings = new System.Windows.Forms.GroupBox();
+            this.btnOpenUsersFile = new System.Windows.Forms.Button();
+            this.cbUsersPath = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.btnOpenContentsFile = new System.Windows.Forms.Button();
             this.cbContentsPath = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -37,7 +40,7 @@ namespace FBTool.App.Views
             this.cbFanpagesPath = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnOpenProfilesFolder = new System.Windows.Forms.Button();
-            this.cbProfilesPath = new System.Windows.Forms.ComboBox();
+            this.cbProfilePath = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.numInHours = new System.Windows.Forms.NumericUpDown();
             this.btnStop = new System.Windows.Forms.Button();
@@ -61,6 +64,9 @@ namespace FBTool.App.Views
             // 
             // gbSettings
             // 
+            this.gbSettings.Controls.Add(this.btnOpenUsersFile);
+            this.gbSettings.Controls.Add(this.cbUsersPath);
+            this.gbSettings.Controls.Add(this.label6);
             this.gbSettings.Controls.Add(this.btnOpenContentsFile);
             this.gbSettings.Controls.Add(this.cbContentsPath);
             this.gbSettings.Controls.Add(this.label3);
@@ -68,23 +74,49 @@ namespace FBTool.App.Views
             this.gbSettings.Controls.Add(this.cbFanpagesPath);
             this.gbSettings.Controls.Add(this.label2);
             this.gbSettings.Controls.Add(this.btnOpenProfilesFolder);
-            this.gbSettings.Controls.Add(this.cbProfilesPath);
+            this.gbSettings.Controls.Add(this.cbProfilePath);
             this.gbSettings.Controls.Add(this.label1);
-            this.gbSettings.Location = new System.Drawing.Point(18, 18);
-            this.gbSettings.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbSettings.Location = new System.Drawing.Point(12, 12);
             this.gbSettings.Name = "gbSettings";
-            this.gbSettings.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbSettings.Size = new System.Drawing.Size(1142, 254);
+            this.gbSettings.Size = new System.Drawing.Size(761, 203);
             this.gbSettings.TabIndex = 0;
             this.gbSettings.TabStop = false;
             this.gbSettings.Text = "Settings";
             // 
+            // btnOpenUsersFile
+            // 
+            this.btnOpenUsersFile.Location = new System.Drawing.Point(653, 71);
+            this.btnOpenUsersFile.Name = "btnOpenUsersFile";
+            this.btnOpenUsersFile.Size = new System.Drawing.Size(72, 23);
+            this.btnOpenUsersFile.TabIndex = 11;
+            this.btnOpenUsersFile.Text = "Open";
+            this.btnOpenUsersFile.UseVisualStyleBackColor = true;
+            this.btnOpenUsersFile.Click += new System.EventHandler(this.btnOpenUsersFile_Click);
+            // 
+            // cbUsersPath
+            // 
+            this.cbUsersPath.FormattingEnabled = true;
+            this.cbUsersPath.Items.AddRange(new object[] {
+            "X:\\Freelancer\\FBTool-master\\FBExecution\\Python\\test\\user.txt"});
+            this.cbUsersPath.Location = new System.Drawing.Point(106, 72);
+            this.cbUsersPath.Name = "cbUsersPath";
+            this.cbUsersPath.Size = new System.Drawing.Size(535, 21);
+            this.cbUsersPath.TabIndex = 10;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(29, 74);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(34, 13);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "Users";
+            // 
             // btnOpenContentsFile
             // 
-            this.btnOpenContentsFile.Location = new System.Drawing.Point(980, 177);
-            this.btnOpenContentsFile.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnOpenContentsFile.Location = new System.Drawing.Point(653, 156);
             this.btnOpenContentsFile.Name = "btnOpenContentsFile";
-            this.btnOpenContentsFile.Size = new System.Drawing.Size(108, 35);
+            this.btnOpenContentsFile.Size = new System.Drawing.Size(72, 23);
             this.btnOpenContentsFile.TabIndex = 8;
             this.btnOpenContentsFile.Text = "Open";
             this.btnOpenContentsFile.UseVisualStyleBackColor = true;
@@ -94,30 +126,27 @@ namespace FBTool.App.Views
             // 
             this.cbContentsPath.FormattingEnabled = true;
             this.cbContentsPath.Items.AddRange(new object[] {
-            "C:\\data\\content.txt"});
-            this.cbContentsPath.Location = new System.Drawing.Point(159, 180);
-            this.cbContentsPath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            "X:\\Freelancer\\FBTool-master\\FBExecution\\Python\\test\\content.txt"});
+            this.cbContentsPath.Location = new System.Drawing.Point(106, 157);
             this.cbContentsPath.Name = "cbContentsPath";
-            this.cbContentsPath.Size = new System.Drawing.Size(800, 28);
+            this.cbContentsPath.Size = new System.Drawing.Size(535, 21);
             this.cbContentsPath.TabIndex = 7;
             this.cbContentsPath.SelectedIndexChanged += new System.EventHandler(this.cbContentsPath_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(44, 185);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(29, 160);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 20);
+            this.label3.Size = new System.Drawing.Size(49, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Contents";
             // 
             // btnOpenFanpagesFile
             // 
-            this.btnOpenFanpagesFile.Location = new System.Drawing.Point(980, 111);
-            this.btnOpenFanpagesFile.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnOpenFanpagesFile.Location = new System.Drawing.Point(653, 113);
             this.btnOpenFanpagesFile.Name = "btnOpenFanpagesFile";
-            this.btnOpenFanpagesFile.Size = new System.Drawing.Size(108, 35);
+            this.btnOpenFanpagesFile.Size = new System.Drawing.Size(72, 23);
             this.btnOpenFanpagesFile.TabIndex = 5;
             this.btnOpenFanpagesFile.Text = "Open";
             this.btnOpenFanpagesFile.UseVisualStyleBackColor = true;
@@ -127,63 +156,57 @@ namespace FBTool.App.Views
             // 
             this.cbFanpagesPath.FormattingEnabled = true;
             this.cbFanpagesPath.Items.AddRange(new object[] {
-            "C:\\data\\page.txt"});
-            this.cbFanpagesPath.Location = new System.Drawing.Point(159, 114);
-            this.cbFanpagesPath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            "X:\\Freelancer\\FBTool-master\\FBExecution\\Python\\test\\page.txt"});
+            this.cbFanpagesPath.Location = new System.Drawing.Point(106, 114);
             this.cbFanpagesPath.Name = "cbFanpagesPath";
-            this.cbFanpagesPath.Size = new System.Drawing.Size(800, 28);
+            this.cbFanpagesPath.Size = new System.Drawing.Size(535, 21);
             this.cbFanpagesPath.TabIndex = 4;
             this.cbFanpagesPath.SelectedIndexChanged += new System.EventHandler(this.cbFanpagesPath_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(44, 118);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(29, 117);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 20);
+            this.label2.Size = new System.Drawing.Size(54, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Fanpages";
             // 
             // btnOpenProfilesFolder
             // 
-            this.btnOpenProfilesFolder.Location = new System.Drawing.Point(980, 43);
-            this.btnOpenProfilesFolder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnOpenProfilesFolder.Location = new System.Drawing.Point(653, 30);
             this.btnOpenProfilesFolder.Name = "btnOpenProfilesFolder";
-            this.btnOpenProfilesFolder.Size = new System.Drawing.Size(108, 35);
+            this.btnOpenProfilesFolder.Size = new System.Drawing.Size(72, 23);
             this.btnOpenProfilesFolder.TabIndex = 2;
             this.btnOpenProfilesFolder.Text = "Open";
             this.btnOpenProfilesFolder.UseVisualStyleBackColor = true;
             this.btnOpenProfilesFolder.Click += new System.EventHandler(this.btnOpenProfilesFolder_Click);
             // 
-            // cbProfilesPath
+            // cbProfilePath
             // 
-            this.cbProfilesPath.FormattingEnabled = true;
-            this.cbProfilesPath.Items.AddRange(new object[] {
-            "X:\\Freelancer\\FBTool-master\\FBExecution\\Python\\profile\\windows"});
-            this.cbProfilesPath.Location = new System.Drawing.Point(159, 47);
-            this.cbProfilesPath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cbProfilesPath.Name = "cbProfilesPath";
-            this.cbProfilesPath.Size = new System.Drawing.Size(800, 28);
-            this.cbProfilesPath.TabIndex = 1;
-            this.cbProfilesPath.SelectedIndexChanged += new System.EventHandler(this.cbProfilesPath_SelectedIndexChanged);
+            this.cbProfilePath.FormattingEnabled = true;
+            this.cbProfilePath.Items.AddRange(new object[] {
+            "X:\\Freelancer\\FBTool-master\\FBExecution\\Python\\_CHROME_PROFILE\\WINDOWS"});
+            this.cbProfilePath.Location = new System.Drawing.Point(106, 31);
+            this.cbProfilePath.Name = "cbProfilePath";
+            this.cbProfilePath.Size = new System.Drawing.Size(535, 21);
+            this.cbProfilePath.TabIndex = 1;
+            this.cbProfilePath.SelectedIndexChanged += new System.EventHandler(this.cbProfilesPath_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(44, 51);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(29, 33);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 20);
+            this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Profiles";
+            this.label1.Text = "Profile Path";
             // 
             // numInHours
             // 
-            this.numInHours.Location = new System.Drawing.Point(289, 301);
-            this.numInHours.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.numInHours.Location = new System.Drawing.Point(193, 221);
             this.numInHours.Name = "numInHours";
-            this.numInHours.Size = new System.Drawing.Size(79, 26);
+            this.numInHours.Size = new System.Drawing.Size(53, 20);
             this.numInHours.TabIndex = 2;
             this.numInHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numInHours.Value = new decimal(new int[] {
@@ -195,10 +218,9 @@ namespace FBTool.App.Views
             // btnStop
             // 
             this.btnStop.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnStop.Location = new System.Drawing.Point(998, 302);
-            this.btnStop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnStop.Location = new System.Drawing.Point(665, 221);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(160, 57);
+            this.btnStop.Size = new System.Drawing.Size(107, 37);
             this.btnStop.TabIndex = 7;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -207,10 +229,9 @@ namespace FBTool.App.Views
             // scheduleStatus
             // 
             this.scheduleStatus.AutoSize = true;
-            this.scheduleStatus.Location = new System.Drawing.Point(14, 854);
-            this.scheduleStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.scheduleStatus.Location = new System.Drawing.Point(9, 580);
             this.scheduleStatus.Name = "scheduleStatus";
-            this.scheduleStatus.Size = new System.Drawing.Size(152, 20);
+            this.scheduleStatus.Size = new System.Drawing.Size(104, 13);
             this.scheduleStatus.TabIndex = 8;
             this.scheduleStatus.Text = "Schedule process ...";
             // 
@@ -224,10 +245,9 @@ namespace FBTool.App.Views
             this.columnHeader5,
             this.columnHeader6});
             this.lvSchedule.HideSelection = false;
-            this.lvSchedule.Location = new System.Drawing.Point(18, 382);
-            this.lvSchedule.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.lvSchedule.Location = new System.Drawing.Point(12, 273);
             this.lvSchedule.Name = "lvSchedule";
-            this.lvSchedule.Size = new System.Drawing.Size(1140, 462);
+            this.lvSchedule.Size = new System.Drawing.Size(761, 302);
             this.lvSchedule.TabIndex = 9;
             this.lvSchedule.UseCompatibleStateImageBehavior = false;
             this.lvSchedule.View = System.Windows.Forms.View.Details;
@@ -264,10 +284,9 @@ namespace FBTool.App.Views
             // 
             // btnAddSchedule
             // 
-            this.btnAddSchedule.Location = new System.Drawing.Point(816, 303);
-            this.btnAddSchedule.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnAddSchedule.Location = new System.Drawing.Point(546, 221);
             this.btnAddSchedule.Name = "btnAddSchedule";
-            this.btnAddSchedule.Size = new System.Drawing.Size(161, 57);
+            this.btnAddSchedule.Size = new System.Drawing.Size(107, 37);
             this.btnAddSchedule.TabIndex = 10;
             this.btnAddSchedule.Text = "Add Schedule";
             this.btnAddSchedule.UseVisualStyleBackColor = true;
@@ -276,9 +295,10 @@ namespace FBTool.App.Views
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(375, 304);
+            this.label4.Location = new System.Drawing.Point(250, 223);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(49, 20);
+            this.label4.Size = new System.Drawing.Size(33, 13);
             this.label4.TabIndex = 11;
             this.label4.Text = "hours";
             // 
@@ -287,10 +307,9 @@ namespace FBTool.App.Views
             this.radioButton2.AutoSize = true;
             this.radioButton2.Checked = true;
             this.radioButton2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.radioButton2.Location = new System.Drawing.Point(18, 302);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButton2.Location = new System.Drawing.Point(12, 221);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(157, 24);
+            this.radioButton2.Size = new System.Drawing.Size(113, 17);
             this.radioButton2.TabIndex = 6;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Number of reviews";
@@ -300,26 +319,26 @@ namespace FBTool.App.Views
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(269, 304);
+            this.label5.Location = new System.Drawing.Point(179, 223);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(13, 20);
+            this.label5.Size = new System.Drawing.Size(12, 13);
             this.label5.TabIndex = 12;
             this.label5.Text = "/";
             // 
             // numOfReviews
             // 
-            this.numOfReviews.Location = new System.Drawing.Point(183, 301);
-            this.numOfReviews.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.numOfReviews.Location = new System.Drawing.Point(122, 221);
             this.numOfReviews.Name = "numOfReviews";
-            this.numOfReviews.Size = new System.Drawing.Size(79, 26);
+            this.numOfReviews.Size = new System.Drawing.Size(53, 20);
             this.numOfReviews.TabIndex = 13;
             this.numOfReviews.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // FBReviewForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1178, 882);
+            this.ClientSize = new System.Drawing.Size(784, 601);
             this.Controls.Add(this.numOfReviews);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -330,7 +349,6 @@ namespace FBTool.App.Views
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.numInHours);
             this.Controls.Add(this.gbSettings);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.Name = "FBReviewForm";
             this.Text = "FBReview";
@@ -351,7 +369,7 @@ namespace FBTool.App.Views
         private System.Windows.Forms.ComboBox cbFanpagesPath;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnOpenProfilesFolder;
-        private System.Windows.Forms.ComboBox cbProfilesPath;
+        private System.Windows.Forms.ComboBox cbProfilePath;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnOpenContentsFile;
         private System.Windows.Forms.ComboBox cbContentsPath;
@@ -371,5 +389,8 @@ namespace FBTool.App.Views
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numOfReviews;
+        private System.Windows.Forms.Button btnOpenUsersFile;
+        private System.Windows.Forms.ComboBox cbUsersPath;
+        private System.Windows.Forms.Label label6;
     }
 }
