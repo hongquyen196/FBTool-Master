@@ -102,6 +102,7 @@ namespace FBTool.App.Views
             this.cbUsersPath.Name = "cbUsersPath";
             this.cbUsersPath.Size = new System.Drawing.Size(535, 21);
             this.cbUsersPath.TabIndex = 10;
+            this.cbUsersPath.SelectedIndexChanged += new System.EventHandler(this.cbUsersPath_SelectedIndexChanged);
             // 
             // label6
             // 

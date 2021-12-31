@@ -1,6 +1,10 @@
-﻿using Quartz;
+﻿using FBTool.App.Schedule;
+using Quartz;
 using Quartz.Impl;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace FBTool.App.Views
 {
@@ -8,31 +12,55 @@ namespace FBTool.App.Views
     {
         public IScheduler scheduler { get; set; }
 
+        public Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>> jobs = new Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>>();
+
+
         public async void Start(string parameterFile, DateTimeOffset startTime)
         {
             scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 
             await scheduler.Start();
 
+            IJobDetail job = JobBuilder.Create<ReviewJob>()
+                    .WithIdentity("Job test", parameterFile)
+                    .Build();
+
+            job.JobDataMap.Put("parameterFile", parameterFile);
+
+            ITrigger trigger = TriggerBuilder.Create()
+                         .WithIdentity("Trigger test", parameterFile)
+                         .StartAt(startTime.ToUniversalTime())
+                         .Build();
+
+            jobs.Add(job, new List<ITrigger> { trigger });
+        }
+
+
+        public async void Schedule(string parameterFile, DateTimeOffset startTime)
+        {
+            scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             scheduler.Context.Put("parameterFile", parameterFile);
 
             IJobDetail job = JobBuilder.Create<ReviewJob>()
                     .WithIdentity("Job review")
                     .Build();
 
-            //ITrigger trigger = TriggerBuilder.Create()
-            //             .StartNow()
-            //             .WithSimpleSchedule(x => x
-            //                 .WithIntervalInSeconds(1))
-            //             .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                         .StartAt(startTime.ToUniversalTime())
-                         .Build();
+                      .StartAt(startTime.ToUniversalTime())
+                      .Build();
 
             await scheduler.ScheduleJob(job, trigger);
-
         }
+
+
+        public async Task AddToSchedule()
+        {
+            await scheduler.ScheduleJobs(jobs, false);
+            jobs.Clear();
+            Console.WriteLine("Done.");
+        }
+
 
         public async void Stop(IScheduler scheduler)
         {

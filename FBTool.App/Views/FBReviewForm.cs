@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FBTool.App.Views
@@ -30,7 +31,7 @@ namespace FBTool.App.Views
 
         private List<string> _parameters = new List<string>();
 
-        private List<IScheduler> schedulers = new List<IScheduler>();
+        private List<IScheduler> _schedulers = new List<IScheduler>();
 
         public FBReviewForm()
         {
@@ -50,7 +51,7 @@ namespace FBTool.App.Views
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            schedulers.ForEach(s => reviewScheduler.Stop(s));
+            _schedulers.ForEach(s => reviewScheduler.Stop(s));
         }
 
         private void btnOpenProfilesFolder_Click(object sender, EventArgs e)
@@ -131,6 +132,17 @@ namespace FBTool.App.Views
     
         }
 
+        private void cbUsersPath_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string[] lines = File.ReadAllLines(cbUsersPath.Text);
+            _users = lines.ToList()
+              .Select(userline => {
+                  string[] split = userline.Split('|');
+                  return new User(split[0], split[0], split[3], null);
+              })
+              .ToList();
+        }
+
         private void cbFanpagesPath_SelectedIndexChanged(object sender, EventArgs e)
         {
             string[] lines = File.ReadAllLines(cbFanpagesPath.Text);
@@ -147,6 +159,12 @@ namespace FBTool.App.Views
 
         private void btnAddSchedule_Click(object sender, EventArgs e)
         {
+
+            if (_users.Count == 0 || _pages.Count == 0 || _contents.Count == 0)
+            {
+                MessageBox.Show("Dữ liệu đầu vào không hợp lệ");
+            }
+
             int numberOfReviews = (int)numOfReviews.Value;
             for (int i = 1; i <= numberOfReviews; i++)
             {
@@ -213,15 +231,14 @@ namespace FBTool.App.Views
 
                     reviewScheduler.Start(path, startTime);
 
-                    schedulers.Add(reviewScheduler.scheduler);
+                    _schedulers.Add(reviewScheduler.scheduler);
                 }
                 catch (Exception ex)
                 {
                     scheduleStatus.Text = ex.Message;
                 }
             }
-            //shareObject.Add("lvSchedule", lvSchedule);
-            //shareObject.Add("scheduleStatus", scheduleStatus);
+            _ = reviewScheduler.AddToSchedule();
         }
 
         private string openFile()
@@ -242,7 +259,9 @@ namespace FBTool.App.Views
         private void FBReviewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _parameters.ForEach(p => File.Delete(p));
+            _schedulers.ForEach(s => reviewScheduler.Stop(s));
         }
+
 
     }
 }

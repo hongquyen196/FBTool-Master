@@ -95,7 +95,7 @@ if __name__ == "__main__":
             options.add_argument("--no-proxy-server")
 
         driver = webdriver.Chrome(executable_path=_CHROME_DRIVER, options=options)
-        driver.get("https://m.facebook.com")
+        driver.get("https://www.whatismyip.com")
         if _HEADLESS:
             driver.minimize_window()
 

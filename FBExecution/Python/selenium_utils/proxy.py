@@ -13,32 +13,36 @@ def add_proxy(options: Options, proxy=None):
       proxy - E.g: user49013:Hq2vjyPJYb@144.202.28.68:49013
     """
     if proxy:
-        try:
-            split = proxy.split("@")
-            split0 = split[0].split(":")
-            split1 = split[1].split(":")
+        logger.info("Add proxy %s", proxy)
+        # Add proxy without authentication
+        options.add_argument("--proxy-server=%s" % proxy)
+        # Add proxy with authentication
+        if "@" in proxy:  
+            try:
+                split = proxy.split("@")
+                split0 = split[0].split(":")
+                split1 = split[1].split(":")
 
-            proxy_host = split1[0]
-            proxy_port = split1[1]
-            proxy_user = split0[0]
-            proxy_pass = split0[1]
+                proxy_host = split1[0]
+                proxy_port = split1[1]
+                proxy_user = split0[0]
+                proxy_pass = split0[1]
 
-            extension = proxy_extension(
-                options=options,
-                PROXY_HOST=proxy_host,
-                PROXY_PORT=proxy_port,
-                PROXY_USER=proxy_user,
-                PROXY_PASS=proxy_pass,
-            )
-            logger.info("Added proxy %s", proxy)
-            options.add_extension(extension)
-            
-        except Exception:
-            logger.error("Cannot add this proxy %s", proxy)
-            options.add_argument("--disable-extensions")
-            options.add_argument("--hide-scrollbars")
-            options.add_argument("--disable-gpu")
-            options.add_argument("--no-proxy-server")
+                extension = proxy_extension(
+                    options=options,
+                    PROXY_HOST=proxy_host,
+                    PROXY_PORT=proxy_port,
+                    PROXY_USER=proxy_user,
+                    PROXY_PASS=proxy_pass,
+                )
+                options.add_extension(extension)
+                
+            except Exception:
+                logger.error("Cannot add this proxy %s", proxy)
+                options.add_argument("--disable-extensions")
+                options.add_argument("--hide-scrollbars")
+                options.add_argument("--disable-gpu")
+                options.add_argument("--no-proxy-server")
 
     return options
 

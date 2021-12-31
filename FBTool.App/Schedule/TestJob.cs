@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace FBTool.App.Views
 {
-    public class ReviewJob : IJob
+    public class TestJob : IJob
     {
         public async Task Execute(IJobExecutionContext context)
         {
@@ -17,21 +17,7 @@ namespace FBTool.App.Views
 
             Console.WriteLine(_parameter);
 
-            Run(_parameter.ToString());
-           
             await Console.Out.WriteLineAsync("Job executed from " + Thread.CurrentThread.ManagedThreadId);
-        }
-
-        private void Run(string args)
-        {
-            using (Process process = Process.Start(Constant.REVIEW_EXECUTABLE, args))
-            {
-                using (StreamReader reader = process.StandardOutput)
-                {
-                    string result = reader.ReadToEnd();
-                    Console.Write(result);
-                }
-            }
         }
     }
 }
