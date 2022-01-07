@@ -1,9 +1,7 @@
-﻿using FBTool.App.Schedule;
-using Quartz;
+﻿using Quartz;
 using Quartz.Impl;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace FBTool.App.Views
@@ -35,32 +33,12 @@ namespace FBTool.App.Views
             jobs.Add(job, new List<ITrigger> { trigger });
         }
 
-
-        public async void Schedule(string parameterFile, DateTimeOffset startTime)
-        {
-            scheduler = await StdSchedulerFactory.GetDefaultScheduler();
-            scheduler.Context.Put("parameterFile", parameterFile);
-
-            IJobDetail job = JobBuilder.Create<ReviewJob>()
-                    .WithIdentity("Job review")
-                    .Build();
-
-
-            ITrigger trigger = TriggerBuilder.Create()
-                      .StartAt(startTime.ToUniversalTime())
-                      .Build();
-
-            await scheduler.ScheduleJob(job, trigger);
-        }
-
-
         public async Task AddToSchedule()
         {
             await scheduler.ScheduleJobs(jobs, false);
             jobs.Clear();
             Console.WriteLine("Done.");
         }
-
 
         public async void Stop(IScheduler scheduler)
         {

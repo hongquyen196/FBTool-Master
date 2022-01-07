@@ -73,7 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Constant.cs" />
-    <Compile Include="Schedule\JobHolder.cs" />
     <Compile Include="Schedule\TestJob.cs" />
     <Compile Include="Views\FBReviewForm.cs">
       <SubType>Form</SubType>
