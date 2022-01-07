@@ -366,3 +366,5 @@ FodyWeavers.xsd
 FBExecution/Python/_REVIEW_EXECUTABLE/
 FBExecution/Python/_CHROME_PROFILE/
 FBExecution/Python/build/
+FBExecution/Python/dist/
+FBExecution/Python/proxy_auth_plugin.zip
