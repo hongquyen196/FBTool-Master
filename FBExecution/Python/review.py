@@ -107,9 +107,7 @@ BUTTON_POST_LOCATOR = (
 
 # Setup driver
 options = Options()
-options.add_argument("--user-data-dir=%s" % _PROFILE_PATH)
-options.add_argument("--profile-directory=%s" % _PROFILE_NAME)
-
+options.add_argument("--user-data-dir=%s" % os.path.join(_PROFILE_PATH, _PROFILE_NAME))
 
 class Facebook:
     """
@@ -232,7 +230,9 @@ if __name__ == "__main__":
             options.add_argument("--no-proxy-server")
 
         driver = webdriver.Chrome(executable_path=_CHROME_DRIVER, options=options)
-
+        driver.set_window_position(0, 0)
+        driver.set_window_size(1024, 768)
+        
         if _HEADLESS:
             driver.minimize_window()
 

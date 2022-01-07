@@ -13,3 +13,5 @@ cxfreeze -c test.py --target-dir dist\test
 
 
 cxfreeze -c X:\Freelancer\FBTool-master\FBExecution\Python\review.py --target-dir X:\Freelancer\FBTool-master\FBExecution\Python\dist\review
+
+cxfreeze -c X:\Freelancer\FBTool-master\FBExecution\Python\login.py --target-dir X:\Freelancer\FBTool-master\FBExecution\Python\dist\login

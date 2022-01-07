@@ -81,8 +81,11 @@ print("_INJECTED_GET_YOUR_POST_REVIEW", _INJECTED_GET_YOUR_POST_REVIEW)
 
 # Setup driver
 options = Options()
-options.add_argument("--user-data-dir=%s" % _PROFILE_PATH)
-options.add_argument("--profile-directory=%s" % _PROFILE_NAME)
+options.add_argument("--no-sandbox")
+options.add_argument("--user-data-dir=%s" % os.path.join(_PROFILE_PATH, _PROFILE_NAME))
+
+# options.add_argument("--profile-directory=%s" % _PROFILE_NAME)
+options.add_experimental_option("detach", True)
 
 if __name__ == "__main__":
     try:
@@ -95,18 +98,21 @@ if __name__ == "__main__":
             options.add_argument("--no-proxy-server")
 
         driver = webdriver.Chrome(executable_path=_CHROME_DRIVER, options=options)
-        driver.get("https://www.whatismyip.com")
+        driver.set_window_position(0, 0)
+        driver.set_window_size(1024, 768)
+        driver.get("https://m.facebook.com")
         if _HEADLESS:
             driver.minimize_window()
-
+        
         while not common.is_browser_closed(driver):
-            # post_id = 0
+            post_id = 0
             # with open(_INJECTED_GET_YOUR_POST_REVIEW, errors="ignore") as f:
             #     script = f.read()
             #     post_id = driver.execute_script(script)
 
             # print("post_id", post_id)
-            print(driver.title)
+            
+            # print(driver.title)
 
     except Exception as e:
         print(e)
