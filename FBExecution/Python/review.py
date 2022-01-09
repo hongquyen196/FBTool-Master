@@ -1,3 +1,4 @@
+import time
 import json
 import sys
 import os
@@ -108,7 +109,7 @@ BUTTON_POST_LOCATOR = (
 # Setup driver
 options = Options()
 options.add_argument("--user-data-dir=%s" % os.path.join(_PROFILE_PATH, _PROFILE_NAME))
-
+options.add_argument("--disable-notifications")
 class Facebook:
     """
     Facebook automation tools
@@ -144,7 +145,7 @@ class Facebook:
             print("photo_ids", photo_ids)
             print("upload_private_attachment done.")
         except Exception as e:
-            print("Cannot upload attachment due: %s", str(e))
+            print("Cannot upload attachment due: %s" % str(e))
             pass
         return photo_ids
 
@@ -200,7 +201,7 @@ class Facebook:
             return post_id
 
         except Exception as e:
-            print("Cannot reviews page due: %s", str(e))
+            print("Cannot reviews page due: %s" % str(e))
             pass
 
     def comments_post(self, post, text, photo=""):
@@ -243,9 +244,12 @@ if __name__ == "__main__":
         attachments = _ATTACHMENTS
 
         facebook.review_page(page, content, attachments)
-        facebook.quit()
 
     except Exception as e:
         print(e)
-        driver.quit()
         pass
+    # Wait 5 minutes to close
+    print("Wait 5 minutes to close")
+    time.sleep(5 * 60)
+    driver.quit()
+
